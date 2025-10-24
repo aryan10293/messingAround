@@ -1,13 +1,14 @@
 import React from 'react';
-
-
+import Navbar from '../components/Navbar';
 function LandingPage() {
   return (
-    <div className="font-sans bg-gray-100 min-h-screen">
-      <header className="bg-blue-500 text-white text-center py-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Fuel Your Body Right</h1>
-        <p className="text-lg md:text-xl">Discover personalized nutrition plans tailored to your needs.</p>
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-8">
+    <React.Fragment>
+      <Navbar />
+      <div className="font-sans bg-gray-100 min-h-screen">
+        <header className="bg-blue-500 text-white text-center py-16">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Fuel Your Body Right</h1>
+          <p className="text-lg md:text-xl">Discover personalized nutrition plans tailored to your needs.</p>
+          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-8">
           Get Started
         </button>
       </header>
@@ -33,6 +34,7 @@ function LandingPage() {
         <p>&copy; 2023 Nutrition App. All rights reserved.</p>
       </footer>
     </div>
+  </React.Fragment>
   );
 }
 

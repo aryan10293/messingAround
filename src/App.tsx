@@ -1,12 +1,21 @@
+import { Routes, Route} from 'react-router-dom'
 import LandingPage from "./pages/LandingPage"
-import "./LandingPage.css"
+import Features from './pages/Features'
+
+
 function App() {
 
 
   return (
-    <>
-      <LandingPage />
-    </>
+   <Routes>       
+          {/* public routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/features" element={<Features />} />
+          {/* <Route path="/"element={<Login /> } /> */}
+          {/* <PrivateRoute> */}
+          {/* <Route path="/dashboard" element={<Dashboard />} />    */}
+          {/* </PrivateRoute> */}
+        </Routes>
   )
 }
 
