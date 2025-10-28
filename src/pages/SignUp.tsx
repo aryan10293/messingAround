@@ -1,42 +1,37 @@
 import React from 'react'
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 function SignUp() { 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = React.useState("");
     const [email, setEmail] = React.useState("");
-    // const [password, setPassword] = React.useState("");
-    // const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [age, setAge] = React.useState("");
 
-    const [formData, setFormData] = React.useState({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: '',
-      confirmPassword: '',
-    });
     const handleData = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        const FormData = {
+        const formData = {
           firstName:firstName,
           lastName: lastName,
-          email: 'email',
-          password: 'password',
-          confirmPassword: 'confirmPassword'
+          email: email,
+          password: password,
+          confirmPassword: confirmPassword,
+          age: age
         }
+
         const idk = await fetch('http://localhost:2040/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(FormData),
+          body: JSON.stringify(formData),
         }); 
 
         const result = await idk.json();
         console.log(result);
-
-        console.log(firstName, lastName, email);
-        console.log(FormData);
+        console.log(formData);
 
     }
     return (
@@ -71,9 +66,9 @@ function SignUp() {
 
             <div className="mt-6 text-sm opacity-90">
               <p>Already have an account?</p>
-              <a href="/login" className="mt-2 inline-block text-white font-semibold underline">
+              <Link to="/login" className="mt-2 inline-block text-white font-semibold underline">
                 Log in
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -97,28 +92,28 @@ function SignUp() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">Email</label>
-                <input name="email" type="email" placeholder="you@example.com" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
+                <input name="email" onChange={(e) => {setEmail(e.target.value)}} type="email" placeholder="you@example.com" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Password</label>
-                  <input name="password" type="password" placeholder="••••••••" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
+                  <input name="password" onChange={(e) => {setPassword(e.target.value)}} type="password" placeholder="••••••••" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Confirm password</label>
-                  <input name="confirmPassword" type="password" placeholder="••••••••" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
+                  <input name="confirmPassword" onChange={(e) => {setConfirmPassword(e.target.value)}} type="password" placeholder="••••••••" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Age</label>
-                  <input name="age" type="number" placeholder="30" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
+                  <input name="age" type="number" placeholder="30" onChange={(e) => {setAge(e.target.value)}} className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700">Height</label>
                   <div className="mt-1 flex gap-2">
                     <input name="height" placeholder="170" className="block w-1/2 rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2" />
@@ -138,10 +133,10 @@ function SignUp() {
                       <option>lb</option>
                     </select>
                   </div>
-                </div>
-              </div>
+                </div>*/}
+              </div> 
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Activity level</label>
                   <select name="activity" className="mt-1 block w-full rounded-md border-gray-200 shadow-sm focus:ring-2 focus:ring-green-400 focus:border-transparent px-3 py-2">
@@ -163,7 +158,7 @@ function SignUp() {
                     <option>Improve energy</option>
                   </select>
                 </div>
-              </div>
+              </div> */}
 
 
               <div className="flex items-center justify-between">
