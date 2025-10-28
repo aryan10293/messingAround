@@ -26,17 +26,18 @@ dotenv.config({ path: "./config/.env" });
 
 // connectDB();
 
-app.use("/", mainRoutes);
+//app.use("/", mainRoutes);
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+
 //Body Parsing
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json({limit: '50mb'}));
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 app.use(logger("dev"));
 
@@ -57,7 +58,7 @@ app.use(passport.session());
 
 app.use(flash());
 
-//app.use("/", mainRoutes);
+app.use("/", mainRoutes);
 
 
 

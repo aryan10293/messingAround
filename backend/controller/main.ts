@@ -11,6 +11,10 @@ let search = {
             return;
         }
     },
+    signup: async (req:Request, res:Response) => {
+        const { firstName, lastName, email, password, confirmPassword } = req.body;
+        console.log(req.body)
+    }
     
 }
 export default search
