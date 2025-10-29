@@ -1,4 +1,7 @@
 import  { Request, Response} from "express";
+import dotenv from "dotenv";
+dotenv.config({ path: "./config/.env" });
+import pool from "../config/neon";
 let search = {
     search: async (req:Request, res:Response) => {
         let randomNumber: number = Math.random();
@@ -14,9 +17,7 @@ let search = {
     signUp: async (req:Request, res:Response) => {
         try {
             const { email,firstName, password, lastName, age, confirmPassword} = req.body;
-            console.log( !email, !password,  !firstName, !lastName, !age);
             if( !email || !password || !firstName|| !lastName || !age){
-                console.log("what the fuck is this ");
                 res.status(400).send({status:"400", error:"missing fields in form"})
             } else if (password !== confirmPassword) {
                 res.status(400).send({status:"400", error:"passwords do not match"})
@@ -25,6 +26,16 @@ let search = {
             }
         } catch (error) {
             res.status(500).send({ status: '500', error: 'Internal server error' });
+        }
+    },
+    testing: async (req:Request, res:Response) => {
+        try {
+            // users equals the name of the table in your database
+            const result = await pool.query("SELECT * FROM users");
+            res.json(result.rows);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Server Error");
         }
     }
     
