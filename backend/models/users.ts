@@ -4,7 +4,7 @@ const createTables = async () => {
     try {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
+                id VARCHAR(255) NOT NULL PRIMARY KEY,
                 email VARCHAR(255) NOT NULL,
                 firstName VARCHAR(255) NOT NULL,
                 lastName VARCHAR(255) NOT NULL,

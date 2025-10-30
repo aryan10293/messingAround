@@ -21,7 +21,7 @@ function SignUp() {
           age: age
         }
 
-        const idk = await fetch('http://localhost:2040/signup', {
+        const idk = await fetch('http://localhost:2050/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

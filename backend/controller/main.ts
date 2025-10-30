@@ -1,7 +1,9 @@
 import  { Request, Response} from "express";
 import dotenv from "dotenv";
 dotenv.config({ path: "./config/.env" });
+import { createUser } from "../models/userModel";
 import pool from "../config/neon";
+
 let search = {
     search: async (req:Request, res:Response) => {
         let randomNumber: number = Math.random();
@@ -22,6 +24,9 @@ let search = {
             } else if (password !== confirmPassword) {
                 res.status(400).send({status:"400", error:"passwords do not match"})
             } else {
+                console.log(req.body)
+                const user = await createUser(firstName, lastName, email, password, age);
+                console.log(user);
                 res.status(200).send({status:"200", message:"user signed up successfully"})
             }
         } catch (error) {
