@@ -1,4 +1,5 @@
 import  { Request, Response} from "express";
+import validator from "validator";
 import dotenv from "dotenv";
 dotenv.config({ path: "./config/.env" });
 import { createUser } from "../models/userModel";
@@ -23,6 +24,8 @@ let search = {
                 res.status(400).send({status:"400", error:"missing fields in form"})
             } else if (password !== confirmPassword) {
                 res.status(400).send({status:"400", error:"passwords do not match"})
+            } else if(!validator.isEmail(email)){
+                res.status(400).send({status:"400", error:"invalid email"})
             } else {
                 console.log(req.body)
                 const user = await createUser(firstName, lastName, email, password, age);
@@ -46,3 +49,8 @@ let search = {
     
 }
 export default search
+
+
+// if(validator.isStrongPassword(password) === false){
+//                 res.status(400).send({status:"400", error:"weak password"})
+//             } else
