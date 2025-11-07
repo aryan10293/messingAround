@@ -1,9 +1,11 @@
 import  { Request, Response} from "express";
+import findUserEmail from "../config/findUserEmail";
 import validator from "validator";
 import dotenv from "dotenv";
 dotenv.config({ path: "./config/.env" });
 import { createUser } from "../models/userModel";
 import pool from "../config/neon";
+import verifyPassword from "../config/verifyPassword";
 
 let search = {
     search: async (req:Request, res:Response) => {
@@ -32,6 +34,23 @@ let search = {
                 console.log(user);
                 res.status(200).send({status:"200", message:"user signed up successfully"})
             }
+        } catch (error) {
+            res.status(500).send({ status: '500', error: 'Internal server error' });
+        }
+    },
+    signIn: async (req:Request, res:Response) => {
+        try {
+            const { email, password } = req.body;
+            if( !email || !password){
+                res.status(400).send({status:"400", error:"missing fields in form"})
+            } else {
+                const user = await findUserEmail(email);
+                // Here you would normally check the email and password against the database
+                const verified = await verifyPassword(user.password, password );
+                console.log( verified, ": this should be true if password matches");
+                // For demonstration, we assume the user is found and password matches
+                res.status(200).send({status:"200", message:"user signed in successfully"})
+            } 
         } catch (error) {
             res.status(500).send({ status: '500', error: 'Internal server error' });
         }

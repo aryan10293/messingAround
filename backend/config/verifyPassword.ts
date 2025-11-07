@@ -5,7 +5,8 @@ const verifyPassword = async (hashedPassword:string, plainTextPassword:string) =
     try {
         return  await argon2.verify(hashedPassword, plainTextPassword);;
     } catch (err) {
-        console.log("wrong password");
+        console.log("wrong password", err);
+        return false; 
         // Handle error
     }
 };

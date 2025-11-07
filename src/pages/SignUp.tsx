@@ -31,7 +31,6 @@ function SignUp() {
 
         const result = await idk.json();
         console.log(result);
-        console.log(formData);
 
     }
     return (
