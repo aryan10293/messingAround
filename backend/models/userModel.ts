@@ -2,6 +2,7 @@ import pool from "../config/neon";
 import { v4 as uuidv4 } from "uuid";
 import hashPassword from "../config/hashPassword";
 
+
 // password will end being hashed in the future
 export async function createUser(firstName:string, lastName:string, email:string, password:string, age:number) {
     const id = uuidv4();

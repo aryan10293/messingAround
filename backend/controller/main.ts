@@ -1,11 +1,14 @@
-import  { Request, Response} from "express";
-import findUserEmail from "../config/findUserEmail";
-import validator from "validator";
 import dotenv from "dotenv";
 dotenv.config({ path: "./config/.env" });
-import { createUser } from "../models/userModel";
+
+import { Request, Response } from "express";
+import findUserEmail from "../config/findUserEmail";
 import pool from "../config/neon";
 import verifyPassword from "../config/verifyPassword";
+import { createUser } from "../models/userModel";
+import jwt from "../config/jwt";
+import validator from "validator";
+import { get } from "http";
 
 let search = {
     search: async (req:Request, res:Response) => {
@@ -22,16 +25,21 @@ let search = {
     signUp: async (req:Request, res:Response) => {
         try {
             const { email,firstName, password, lastName, age, confirmPassword} = req.body;
-            if( !email || !password || !firstName|| !lastName || !age){
+            const doesEmailExist = await findUserEmail(req.body.email);
+            if(doesEmailExist){
+                res.status(400).send({status:"400", error:"email already in use"})
+            } else if(!email || !password || !firstName|| !lastName || !age){
                 res.status(400).send({status:"400", error:"missing fields in form"})
             } else if (password !== confirmPassword) {
+                // add validator.isStrongPassword(password) in the future
+                // if (!validator.isStrongPassword(password, { minLength: 8 })) {
+                //     return res.status(400).json({ error: "Password too weak" });
+                // }
                 res.status(400).send({status:"400", error:"passwords do not match"})
             } else if(!validator.isEmail(email)){
                 res.status(400).send({status:"400", error:"invalid email"})
             } else {
-                console.log(req.body)
                 const user = await createUser(firstName, lastName, email, password, age);
-                console.log(user);
                 res.status(200).send({status:"200", message:"user signed up successfully"})
             }
         } catch (error) {
@@ -41,15 +49,32 @@ let search = {
     signIn: async (req:Request, res:Response) => {
         try {
             const { email, password } = req.body;
+            const user = await findUserEmail(email);
+            const verified = await verifyPassword(user.password, password);
             if( !email || !password){
                 res.status(400).send({status:"400", error:"missing fields in form"})
+            } else if(!user){
+                res.status(400).send({status:"400", error:"email address not found"})
+            } else if (!verified){
+                res.status(400).send({status:"400", error:"incorrect password"})
             } else {
-                const user = await findUserEmail(email);
+                console.log(user, "this is thee user from db");
+                const token = jwt(user.id);
+                // const token = jwt.sign({ sub: user._id }, process.env.SECRET_KEY as string , ) //{ expiresIn: '1m' }
+                // res.status(200).send({ token, newUser: user, status:'200' })
+
+                res.cookie("access_token", token, {
+                    httpOnly: true, // cannot be accessed by JS
+                    secure: false, // process.env.NODE_ENV === "production", // only HTTPS in production
+                    sameSite: "strict", // prevents CSRF
+                    maxAge: 15 * 60 * 1000, // 15 minutes
+                });
+
+                res.status(200).send({ status: '200', message: 'user signed in successfully' });
                 // Here you would normally check the email and password against the database
-                const verified = await verifyPassword(user.password, password );
-                console.log( verified, ": this should be true if password matches");
+                
                 // For demonstration, we assume the user is found and password matches
-                res.status(200).send({status:"200", message:"user signed in successfully"})
+                
             } 
         } catch (error) {
             res.status(500).send({ status: '500', error: 'Internal server error' });
@@ -64,8 +89,16 @@ let search = {
             console.error(err);
             res.status(500).send("Server Error");
         }
-    }
+    }, getProfile: async (req:Request, res:Response) => {
+        try {
     
+            res.json({ message: "Welcome back!", user: (req as any).user });
+          
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ status: '500', error: 'Internal server error' });
+        }
+      }
 }
 export default search
 

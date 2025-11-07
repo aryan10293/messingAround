@@ -5,12 +5,25 @@ const SignIn: React.FC = () => {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
+    const testing = async () => {
+      const response = await fetch('http://localhost:2050/profile', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Include cookies in the request
+      });
+
+      const result = await response.json();
+      console.log(result);
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         // Handle sign-in logic here
 
         const formData = {
-          email: email,
+          email: email.trim().toLowerCase(),
           password: password,
         }
 
@@ -19,6 +32,7 @@ const SignIn: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: "include", //  ensures cookies are saved
           body: JSON.stringify(formData),
         }); 
 
@@ -122,6 +136,15 @@ const SignIn: React.FC = () => {
                 >
                   Sign in
                 </button>
+
+                <button
+                  type="button"
+                  onClick={testing}
+                  className="w-full inline-flex items-center justify-center px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-md font-medium shadow"
+                >
+                  testing app
+                </button>
+
               </div>
 
               <div className="flex items-center">

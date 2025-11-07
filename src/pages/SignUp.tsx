@@ -15,7 +15,7 @@ function SignUp() {
         const formData = {
           firstName:firstName,
           lastName: lastName,
-          email: email,
+          email: email.trim().toLowerCase(),
           password: password,
           confirmPassword: confirmPassword,
           age: age
